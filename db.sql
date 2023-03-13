@@ -33,14 +33,15 @@ CREATE TABLE "users" (
 	"uid" varchar(255) NOT NULL,
 	"display_name" varchar(50) NOT NULL,
 	"email" varchar(100) NOT NULL,
-	"photo_url" varchar(500)
+	"photo_url" varchar(500),
+	"role" varchar(10) NOT NULL
 )
 ;
 
 ALTER TABLE "users" ADD CONSTRAINT "PK_Users" PRIMARY KEY ("uid");
 
 BEGIN;
-INSERT INTO "users" (uid, display_name, email, photo_url) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'cauthuminhtri10@gmail.com', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c');
+INSERT INTO "users" (uid, display_name, email, photo_url, role) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'cauthuminhtri10@gmail.com', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', 'user');
 COMMIT;
 
 -- ----------------------------
