@@ -34,6 +34,7 @@ CREATE TABLE "users" (
 	"display_name" varchar(50) NOT NULL,
 	"email" varchar(100) NOT NULL,
 	"photo_url" varchar(500),
+	"status" boolean NOT NULL,
 	"role" varchar(10) NOT NULL
 )
 ;
@@ -41,7 +42,7 @@ CREATE TABLE "users" (
 ALTER TABLE "users" ADD CONSTRAINT "PK_Users" PRIMARY KEY ("uid");
 
 BEGIN;
-INSERT INTO "users" (uid, display_name, email, photo_url, role) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'cauthuminhtri10@gmail.com', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', 'user');
+INSERT INTO "users" (uid, display_name, email, photo_url, status, role) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'cauthuminhtri10@gmail.com', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', TRUE, 'user');
 COMMIT;
 
 -- ----------------------------
@@ -111,10 +112,10 @@ COMMIT;
 -- ----------------------------
 -- Foreign key
 -- ----------------------------
-ALTER TABLE carts ADD CONSTRAINT FK_Carts_Users FOREIGN KEY (user_uid) REFERENCES users (uid);
-ALTER TABLE carts ADD CONSTRAINT FK_Carts_Products FOREIGN KEY (product_id) REFERENCES products (id);
-ALTER TABLE posts ADD CONSTRAINT FK_Posts_Users FOREIGN KEY (user_uid) REFERENCES users (uid);
-ALTER TABLE posts ADD CONSTRAINT FK_Posts_Products FOREIGN KEY (product_id) REFERENCES products (id);
+--ALTER TABLE carts ADD CONSTRAINT FK_Carts_Users FOREIGN KEY (user_uid) REFERENCES users (uid);
+--ALTER TABLE carts ADD CONSTRAINT FK_Carts_Products FOREIGN KEY (product_id) REFERENCES products (id);
+--ALTER TABLE posts ADD CONSTRAINT FK_Posts_Users FOREIGN KEY (user_uid) REFERENCES users (uid);
+--ALTER TABLE posts ADD CONSTRAINT FK_Posts_Products FOREIGN KEY (product_id) REFERENCES products (id);
 --ALTER TABLE carts DROP CONSTRAINT FK_Carts_Users;
 --ALTER TABLE carts DROP CONSTRAINT FK_Carts_Products;
 --ALTER TABLE posts DROP CONSTRAINT FK_Posts_Users; 

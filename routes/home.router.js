@@ -7,6 +7,7 @@ router.get("/products", HomeController.getAllProducts);
 router.get("/carts", HomeController.getAllCarts);
 router.get("/posts", HomeController.getAllPosts);
 router.get("/users", HomeController.getAllUsers);
+router.post("/status", HomeController.changeUserStatus); // User login event handle: {uid, displayName, email, photoURL}
 
 // NOTE: Request from client to server must be: object type
 

@@ -25,6 +25,32 @@ async function getAllUsers() {
   return rs;
 }
 
+async function getUserByUid(uid) {
+  const rs = await db.any('SELECT * FROM "users" WHERE uid = $1', [uid]);
+  return rs;
+}
+
+async function createNewUser(user) {
+  const rs = await db.one(
+    'INSERT INTO "users"(uid, display_name, email, photo_url, status, role) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+    [
+      user.uid,
+      user.display_name,
+      user.email,
+      user.photo_url,
+      user.status,
+      user.role,
+    ]
+  );
+}
+
+async function changeStatus(user) {
+  const rs = await db.one(
+    'UPDATE "users" SET status = $2 WHERE uid = $1 RETURNING *',
+    [user.uid, user.status]
+  );
+}
+
 // async function createNewTask(task) {
 //   const rs = await db.one(
 //     'INSERT INTO "tasks"(id, name, status) VALUES($1, $2, $3) RETURNING *',
@@ -40,23 +66,12 @@ async function getAllUsers() {
 //   ]);
 // }
 
-// async function editTask(task) {
-//   const rs = await db.one(
-//     'UPDATE "tasks" SET name = $2 WHERE id = $1 RETURNING *',
-//     [task.id, task.name, task.status]
-//   );
-// }
-
-// async function completeTask(task) {
-//   const rs = await db.one(
-//     'UPDATE "tasks" SET status = $3 WHERE id = $1 RETURNING *',
-//     [task.id, task.name, task.status]
-//   );
-// }
-
 module.exports = {
   getAllProducts,
   getAllCarts,
   getAllPosts,
   getAllUsers,
+  getUserByUid,
+  createNewUser,
+  changeStatus,
 };
