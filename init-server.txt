@@ -1,0 +1,1 @@
+npm install express nodemon body-parser express-session multer pg-promise bcrypt cors dotenv --save
