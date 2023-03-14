@@ -374,6 +374,96 @@ class HomeController {
       next(error);
     }
   };
+
+  editUserByEmail = async (req, res, next) => {
+    try {
+      const user = req.body;
+      const [checkUser] = await db.getUserByEmail(user.email);
+
+      if (checkUser) {
+        await db.editUserByEmail(user);
+        res.status(200).json({
+          message: "success",
+        });
+      } else {
+        res.status(200).json({
+          message: "user not found",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  createNewPosts = async (req, res, next) => {
+    try {
+      const data = req.body;
+      const date = getDate();
+
+      if (data) {
+        // Create new posts data
+        const newData = { ...data, date: date };
+        console.log(newData);
+        await db.createNewPosts(newData);
+
+        res.status(200).json({
+          message: "success",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  deletePostsById = async (req, res, next) => {
+    try {
+      const data = req.body;
+      // console.log(data);
+
+      if (data) {
+        await db.deletePostsById(data.id, data.email);
+
+        res.status(200).json({
+          message: "success",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  editPostsById = async (req, res, next) => {
+    try {
+      const data = req.body;
+
+      if (data) {
+        const date = getDate();
+
+        // Create new posts data
+        const newData = { ...data, date: date };
+        await db.editPostById(newData);
+        console.log(newData);
+
+        res.status(200).json({
+          message: "success",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
 }
 
 module.exports = new HomeController();
