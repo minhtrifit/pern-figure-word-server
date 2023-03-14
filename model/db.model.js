@@ -10,9 +10,41 @@ async function getAllProducts() {
   return rs;
 }
 
+async function getProductById(id) {
+  const rs = await db.any('SELECT * FROM "products" WHERE id = $1', [id]);
+  return rs;
+}
+
 async function getAllCarts() {
   const rs = await db.any('SELECT * FROM "carts"');
   return rs;
+}
+
+async function getCartByOrderId(id) {
+  const rs = await db.any('SELECT * FROM "carts" WHERE order_id = $1', [id]);
+  return rs;
+}
+
+async function getCartByUserUid(uid) {
+  const rs = await db.any(
+    `SELECT order_id, user_uid, product_id, amount, price, TO_CHAR(date, 'dd/mm/yyyy') "date" FROM "carts" WHERE user_uid = $1`,
+    [uid]
+  );
+  return rs;
+}
+
+async function createNewCarts(cart) {
+  const rs = await db.one(
+    'INSERT INTO "carts"(order_id, user_uid, product_id, amount, price, date) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+    [
+      cart.order_id,
+      cart.user_uid,
+      cart.product_id,
+      cart.amount,
+      cart.price,
+      cart.date,
+    ]
+  );
 }
 
 async function getAllPosts() {
@@ -51,13 +83,6 @@ async function changeStatus(user) {
   );
 }
 
-// async function createNewTask(task) {
-//   const rs = await db.one(
-//     'INSERT INTO "tasks"(id, name, status) VALUES($1, $2, $3) RETURNING *',
-//     [task.id, task.name, task.status]
-//   );
-// }
-
 // async function deleteTask(task) {
 //   const rs = await db.one('DELETE FROM "tasks" WHERE id = $1 RETURNING *', [
 //     task.id,
@@ -68,7 +93,11 @@ async function changeStatus(user) {
 
 module.exports = {
   getAllProducts,
+  getProductById,
   getAllCarts,
+  getCartByOrderId,
+  getCartByUserUid,
+  createNewCarts,
   getAllPosts,
   getAllUsers,
   getUserByUid,

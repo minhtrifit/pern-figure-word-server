@@ -11,6 +11,7 @@ COMMIT;
 DROP TABLE IF EXISTS "carts";
 CREATE TABLE "carts" (
 	"id" uuid DEFAULT uuid_generate_v4 (),
+	"order_id" int4 NOT NULL,
 	"user_uid" varchar(255) NOT NULL,
 	"product_id" int4 NOT NULL,
 	"amount" int4 NOT NULL,
@@ -22,7 +23,7 @@ CREATE TABLE "carts" (
 ALTER TABLE "carts" ADD CONSTRAINT "PK_Carts" PRIMARY KEY ("id");
 
 BEGIN;
-INSERT INTO "carts" (user_uid, product_id, amount, price, date) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 1, 2, 1600000, '2023-03-13');
+INSERT INTO "carts" (user_uid, order_id, product_id, amount, price, date) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 15637, 1, 2, 1600000, '2023-03-13');
 COMMIT;
 
 -- ----------------------------

@@ -1,6 +1,43 @@
 const db = require("../model/db.model.js");
 const { use } = require("../routes/home.router.js");
 
+const getRndInteger = (min, max) => {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const getDate = () => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const newDate =
+    year.toString() + "-" + month.toString() + "-" + day.toString();
+  return newDate;
+};
+
+const checkExistOrderId = (id, list) => {
+  for (var i = 0; i < list.length; ++i) {
+    if (list[i] === id) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const checkExistOrderId2 = (id, list) => {
+  for (var i = 0; i < list.length; ++i) {
+    if (list[i].order_id === id) {
+      return true;
+    }
+  }
+  return false;
+};
+
+const checkParamsIsNumber = (key) => {
+  if (parseInt(key)) return true;
+  return false;
+};
+
 class HomeController {
   getConnectServer = async (req, res, next) => {
     try {
@@ -18,10 +55,69 @@ class HomeController {
   getAllProducts = async (req, res, next) => {
     try {
       const productList = await db.getAllProducts();
+
       res.status(200).json({
         message: "success",
         data: productList,
       });
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  getProductById = async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const [product] = await db.getProductById(id);
+
+      if (product) {
+        res.status(200).json({
+          message: "success",
+          data: product,
+        });
+      } else {
+        res.status(404).json({
+          message: "404 not found",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  searchProduct = async (req, res, next) => {
+    try {
+      const { key } = req.params;
+      let check = false;
+      let data = [];
+      const productList = await db.getAllProducts();
+      // console.log(key);
+
+      data = productList.filter((item) => {
+        return item.name.toUpperCase().includes(key.toUpperCase());
+      });
+
+      // Find products
+      if (data.length !== 0) {
+        check = true;
+      }
+
+      if (check === true) {
+        res.status(200).json({
+          message: "success",
+          data: data,
+        });
+      } else {
+        res.status(404).json({
+          message: "404 not found",
+        });
+      }
     } catch (error) {
       res.status(404).json({
         message: "failed",
@@ -32,11 +128,77 @@ class HomeController {
 
   getAllCarts = async (req, res, next) => {
     try {
-      const productList = await db.getAllCarts();
+      const cartList = await db.getAllCarts();
+
       res.status(200).json({
         message: "success",
-        data: productList,
+        data: cartList,
       });
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  getTotalCartByUserUid = async (req, res, next) => {
+    try {
+      const { uid } = req.params;
+      const cartList = await db.getCartByUserUid(uid);
+      let newData = [];
+
+      let orderIdList = [];
+      // console.log(cartList);
+
+      if (cartList) {
+        // Get product id list
+        for (var i = 0; i < cartList.length; ++i) {
+          if (!checkExistOrderId(cartList[i].order_id, orderIdList)) {
+            orderIdList.push(cartList[i].order_id);
+          }
+        }
+
+        for (var i = 0; i < orderIdList.length; ++i) {
+          for (var j = 0; j < cartList.length; ++j) {
+            let order = {
+              user_uid: "",
+              order_id: 0,
+              date: "",
+              total: 0,
+              detail: [],
+            };
+            // Create Order list response
+            if (orderIdList[i] === cartList[j].order_id) {
+              // Cart not exist in order list
+              if (!checkExistOrderId2(cartList[j].order_id, newData)) {
+                order.user_uid = cartList[j].user_uid;
+                order.order_id = cartList[j].order_id;
+                order.date = cartList[j].date;
+                order.total = cartList[j].price;
+                order.detail.push(cartList[j]);
+                newData.push(order);
+              } else {
+                for (var k = 0; k < newData.length; ++k) {
+                  if (newData[k].order_id === cartList[j].order_id) {
+                    newData[k].total += cartList[j].price;
+                    newData[k].detail.push(cartList[j]);
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        res.status(200).json({
+          message: "success",
+          data: newData,
+        });
+      } else {
+        res.status(404).json({
+          message: "Order not found",
+        });
+      }
     } catch (error) {
       res.status(404).json({
         message: "failed",
@@ -47,10 +209,11 @@ class HomeController {
 
   getAllPosts = async (req, res, next) => {
     try {
-      const productList = await db.getAllPosts();
+      const postList = await db.getAllPosts();
+
       res.status(200).json({
         message: "success",
-        data: productList,
+        data: postList,
       });
     } catch (error) {
       res.status(404).json({
@@ -62,11 +225,35 @@ class HomeController {
 
   getAllUsers = async (req, res, next) => {
     try {
-      const productList = await db.getAllUsers();
+      const userList = await db.getAllUsers();
+
       res.status(200).json({
         message: "success",
-        data: productList,
+        data: userList,
       });
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  getTargetUser = async (req, res, next) => {
+    try {
+      const { uid } = req.params;
+      const [user] = await db.getUserByUid(uid);
+
+      if (user) {
+        res.status(200).json({
+          message: "success",
+          data: user,
+        });
+      } else {
+        res.status(404).json({
+          message: "user not found",
+        });
+      }
     } catch (error) {
       res.status(404).json({
         message: "failed",
@@ -77,9 +264,9 @@ class HomeController {
 
   changeUserStatus = async (req, res, next) => {
     try {
-      // const { uid, displayName, email, photoURL } = user;
+      // { uid, displayName, email, photoURL }
       const info = req.body;
-      console.log(info);
+      // console.log(info);
       const [user] = await db.getUserByUid(info.uid);
 
       // User has login before
@@ -107,6 +294,52 @@ class HomeController {
       res.status(200).json({
         message: "success",
       });
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  confirmCart = async (req, res, next) => {
+    try {
+      const data = req.body; // [ {user_uid, product_id, amount, price}, ... ]
+      const cartList = await db.getAllCarts();
+      let order_id;
+      let checkOrderId;
+      let newData = [];
+      let date = getDate();
+
+      do {
+        order_id = getRndInteger(10000, 99999);
+        checkOrderId = await db.getCartByOrderId(order_id);
+      } while (checkOrderId.length !== 0);
+
+      for (var i = 0; i < data.length; ++i) {
+        let newCart = {
+          order_id: order_id,
+          user_uid: data[i].user_uid,
+          product_id: data[i].product_id,
+          amount: data[i].amount,
+          price: data[i].price,
+          date: date,
+        };
+        newData.push(newCart);
+      }
+
+      if (newData) {
+        for (var i = 0; i < newData.length; ++i) {
+          await db.createNewCarts(newData[i]);
+        }
+        res.status(200).json({
+          message: "success",
+        });
+      } else {
+        res.status(200).json({
+          message: "failed",
+        });
+      }
     } catch (error) {
       res.status(404).json({
         message: "failed",
