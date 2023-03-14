@@ -6,8 +6,9 @@ router.get("/", HomeController.getConnectServer);
 
 // User API
 router.get("/users", HomeController.getAllUsers);
-router.get("/users/:uid", HomeController.getTargetUser); // Get target User by uid
-router.post("/status", HomeController.changeUserStatus); // User login event handle: {uid, displayName, email, photoURL}
+router.get("/users/:email", HomeController.getTargetUser); // Get target User by email
+router.post("/status", HomeController.changeUserStatus); // User login event handle: {email, uid, displayName, photoURL}
+router.delete("/users/delete", HomeController.deleteUserByEmail);
 
 // Product API
 router.get("/products", HomeController.getAllProducts);
@@ -16,7 +17,7 @@ router.get("/products/search/:key", HomeController.searchProduct); // Get produc
 
 // Cart API
 router.get("/carts", HomeController.getAllCarts);
-router.get("/carts/:uid", HomeController.getTotalCartByUserUid); // Get all order of 1 user
+router.get("/carts/:email", HomeController.getTotalCartByUserEmail); // Get all order of 1 user
 router.post("/carts/confirm", HomeController.confirmCart); // Create new order (1 order inclues many products)
 
 // Post API

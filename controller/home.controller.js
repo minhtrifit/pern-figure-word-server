@@ -142,10 +142,10 @@ class HomeController {
     }
   };
 
-  getTotalCartByUserUid = async (req, res, next) => {
+  getTotalCartByUserEmail = async (req, res, next) => {
     try {
-      const { uid } = req.params;
-      const cartList = await db.getCartByUserUid(uid);
+      const { email } = req.params;
+      const cartList = await db.getCartByUserEmail(email);
       let newData = [];
 
       let orderIdList = [];
@@ -162,7 +162,7 @@ class HomeController {
         for (var i = 0; i < orderIdList.length; ++i) {
           for (var j = 0; j < cartList.length; ++j) {
             let order = {
-              user_uid: "",
+              user_email: "",
               order_id: 0,
               date: "",
               total: 0,
@@ -172,7 +172,7 @@ class HomeController {
             if (orderIdList[i] === cartList[j].order_id) {
               // Cart not exist in order list
               if (!checkExistOrderId2(cartList[j].order_id, newData)) {
-                order.user_uid = cartList[j].user_uid;
+                order.user_email = cartList[j].user_email;
                 order.order_id = cartList[j].order_id;
                 order.date = cartList[j].date;
                 order.total = cartList[j].price;
@@ -241,8 +241,8 @@ class HomeController {
 
   getTargetUser = async (req, res, next) => {
     try {
-      const { uid } = req.params;
-      const [user] = await db.getUserByUid(uid);
+      const { email } = req.params;
+      const [user] = await db.getUserByEmail(email);
 
       if (user) {
         res.status(200).json({
@@ -264,10 +264,10 @@ class HomeController {
 
   changeUserStatus = async (req, res, next) => {
     try {
-      // { uid, displayName, email, photoURL }
+      // { email, uid, displayName, photoURL }
       const info = req.body;
       // console.log(info);
-      const [user] = await db.getUserByUid(info.uid);
+      const [user] = await db.getUserByEmail(info.email);
 
       // User has login before
       if (user) {
@@ -304,7 +304,7 @@ class HomeController {
 
   confirmCart = async (req, res, next) => {
     try {
-      const data = req.body; // [ {user_uid, product_id, amount, price}, ... ]
+      const data = req.body; // [ {user_email, product_id, amount, price}, ... ]
       const cartList = await db.getAllCarts();
       let order_id;
       let checkOrderId;
@@ -319,7 +319,7 @@ class HomeController {
       for (var i = 0; i < data.length; ++i) {
         let newCart = {
           order_id: order_id,
-          user_uid: data[i].user_uid,
+          user_email: data[i].user_email,
           product_id: data[i].product_id,
           amount: data[i].amount,
           price: data[i].price,
@@ -338,6 +338,33 @@ class HomeController {
       } else {
         res.status(200).json({
           message: "failed",
+        });
+      }
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
+  deleteUserByEmail = async (req, res, next) => {
+    try {
+      const { email } = req.body;
+      const [result] = await db.getUserByEmail(email);
+      // console.log(result);
+
+      // User found
+      if (result) {
+        await db.deleteUserByEmail(email);
+        res.status(200).json({
+          message: "success",
+        });
+      }
+      // User not found
+      else {
+        res.status(404).json({
+          message: "user not found",
         });
       }
     } catch (error) {

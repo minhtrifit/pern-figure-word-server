@@ -11,8 +11,8 @@ COMMIT;
 DROP TABLE IF EXISTS "carts";
 CREATE TABLE "carts" (
 	"id" uuid DEFAULT uuid_generate_v4 (),
+	"user_email" varchar(100) NOT NULL,
 	"order_id" int4 NOT NULL,
-	"user_uid" varchar(255) NOT NULL,
 	"product_id" int4 NOT NULL,
 	"amount" int4 NOT NULL,
 	"price" int4 NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE "carts" (
 ALTER TABLE "carts" ADD CONSTRAINT "PK_Carts" PRIMARY KEY ("id");
 
 BEGIN;
-INSERT INTO "carts" (user_uid, order_id, product_id, amount, price, date) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 15637, 1, 2, 1600000, '2023-03-13');
+INSERT INTO "carts" (user_email, order_id, product_id, amount, price, date) VALUES ('cauthuminhtri10@gmail.com', 15637, 1, 2, 1600000, '2023-03-13');
 COMMIT;
 
 -- ----------------------------
@@ -31,19 +31,19 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS "users";
 CREATE TABLE "users" (
+	"email" varchar(100) NOT NULL,
 	"uid" varchar(255) NOT NULL,
 	"display_name" varchar(50) NOT NULL,
-	"email" varchar(100) NOT NULL,
 	"photo_url" varchar(500),
 	"status" boolean NOT NULL,
 	"role" varchar(10) NOT NULL
 )
 ;
 
-ALTER TABLE "users" ADD CONSTRAINT "PK_Users" PRIMARY KEY ("uid");
+ALTER TABLE "users" ADD CONSTRAINT "PK_Users" PRIMARY KEY ("email");
 
 BEGIN;
-INSERT INTO "users" (uid, display_name, email, photo_url, status, role) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'cauthuminhtri10@gmail.com', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', TRUE, 'user');
+INSERT INTO "users" (email, uid, display_name, photo_url, status, role) VALUES ('cauthuminhtri10@gmail.com', 'fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', TRUE, 'user');
 COMMIT;
 
 -- ----------------------------
@@ -52,7 +52,7 @@ COMMIT;
 DROP TABLE IF EXISTS "posts";
 CREATE TABLE "posts" (
 	"id" SERIAL,
-	"user_uid" varchar(50) NOT NULL,
+	"user_email" varchar(100) NOT NULL,
 	"product_id" int4 NOT NULL,
 	"content" varchar(500) NOT NULL,
 	"date" date
@@ -62,7 +62,7 @@ CREATE TABLE "posts" (
 ALTER TABLE "posts" ADD CONSTRAINT "PK_Posts" PRIMARY KEY ("id");
 
 BEGIN;
-INSERT INTO "posts" (user_uid, product_id, content, date) VALUES ('fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 1, 'I was so excited to unbox this!', '2023-03-13');
+INSERT INTO "posts" (user_email, product_id, content, date) VALUES ('cauthuminhtri10@gmail.com', 1, 'I was so excited to unbox this!', '2023-03-13');
 COMMIT;
 
 -- ----------------------------
@@ -113,9 +113,9 @@ COMMIT;
 -- ----------------------------
 -- Foreign key
 -- ----------------------------
---ALTER TABLE carts ADD CONSTRAINT FK_Carts_Users FOREIGN KEY (user_uid) REFERENCES users (uid);
+--ALTER TABLE carts ADD CONSTRAINT FK_Carts_Users FOREIGN KEY (user_email) REFERENCES users (email);
 --ALTER TABLE carts ADD CONSTRAINT FK_Carts_Products FOREIGN KEY (product_id) REFERENCES products (id);
---ALTER TABLE posts ADD CONSTRAINT FK_Posts_Users FOREIGN KEY (user_uid) REFERENCES users (uid);
+--ALTER TABLE posts ADD CONSTRAINT FK_Posts_Users FOREIGN KEY (user_email) REFERENCES users (email);
 --ALTER TABLE posts ADD CONSTRAINT FK_Posts_Products FOREIGN KEY (product_id) REFERENCES products (id);
 --ALTER TABLE carts DROP CONSTRAINT FK_Carts_Users;
 --ALTER TABLE carts DROP CONSTRAINT FK_Carts_Products;

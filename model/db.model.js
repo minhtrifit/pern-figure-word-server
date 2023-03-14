@@ -25,20 +25,20 @@ async function getCartByOrderId(id) {
   return rs;
 }
 
-async function getCartByUserUid(uid) {
+async function getCartByUserEmail(email) {
   const rs = await db.any(
-    `SELECT order_id, user_uid, product_id, amount, price, TO_CHAR(date, 'dd/mm/yyyy') "date" FROM "carts" WHERE user_uid = $1`,
-    [uid]
+    `SELECT order_id, user_email, product_id, amount, price, TO_CHAR(date, 'dd/mm/yyyy') "date" FROM "carts" WHERE user_email = $1`,
+    [email]
   );
   return rs;
 }
 
 async function createNewCarts(cart) {
   const rs = await db.one(
-    'INSERT INTO "carts"(order_id, user_uid, product_id, amount, price, date) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+    'INSERT INTO "carts"(order_id, user_email, product_id, amount, price, date) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
     [
       cart.order_id,
-      cart.user_uid,
+      cart.user_email,
       cart.product_id,
       cart.amount,
       cart.price,
@@ -57,8 +57,8 @@ async function getAllUsers() {
   return rs;
 }
 
-async function getUserByUid(uid) {
-  const rs = await db.any('SELECT * FROM "users" WHERE uid = $1', [uid]);
+async function getUserByEmail(email) {
+  const rs = await db.any('SELECT * FROM "users" WHERE email = $1', [email]);
   return rs;
 }
 
@@ -76,6 +76,18 @@ async function createNewUser(user) {
   );
 }
 
+async function deleteUserByUid(uid) {
+  const rs = await db.one('DELETE FROM "users" WHERE uid = $1 RETURNING *', [
+    uid,
+  ]);
+}
+
+async function deleteUserByEmail(email) {
+  const rs = await db.one('DELETE FROM "users" WHERE email = $1 RETURNING *', [
+    email,
+  ]);
+}
+
 async function changeStatus(user) {
   const rs = await db.one(
     'UPDATE "users" SET status = $2 WHERE uid = $1 RETURNING *',
@@ -83,24 +95,18 @@ async function changeStatus(user) {
   );
 }
 
-// async function deleteTask(task) {
-//   const rs = await db.one('DELETE FROM "tasks" WHERE id = $1 RETURNING *', [
-//     task.id,
-//     task.name,
-//     task.status,
-//   ]);
-// }
-
 module.exports = {
   getAllProducts,
   getProductById,
   getAllCarts,
   getCartByOrderId,
-  getCartByUserUid,
+  getCartByUserEmail,
   createNewCarts,
   getAllPosts,
   getAllUsers,
-  getUserByUid,
+  getUserByEmail,
+  deleteUserByUid,
+  deleteUserByEmail,
   createNewUser,
   changeStatus,
 };
