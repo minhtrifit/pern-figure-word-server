@@ -3,6 +3,7 @@ var router = express.Router();
 const UserController = require("../controller/user.controller.js");
 
 router.get("/", UserController.getAllUsers);
+router.get("/account", UserController.getAllAccountUsers); // Get all Account user
 router.get("/:email", UserController.getTargetUser); // Get target User by email
 router.post("/register", UserController.handleUserRegister);
 router.post("/login", UserController.handleUserLogin); // {email, password}

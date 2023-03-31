@@ -40,6 +40,25 @@ class UserController {
     }
   };
 
+  getAllAccountUsers = async (req, res, next) => {
+    try {
+      const userList = await db.getAllUsers();
+      const userAccountList = userList.filter((user) => {
+        return user.password !== null;
+      });
+
+      res.status(200).json({
+        message: "success",
+        userList: userAccountList,
+      });
+    } catch (error) {
+      res.status(404).json({
+        message: "failed",
+      });
+      next(error);
+    }
+  };
+
   getTargetUser = async (req, res, next) => {
     try {
       const { email } = req.params;
