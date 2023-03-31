@@ -105,6 +105,20 @@ async function createNewUser(user) {
   );
 }
 
+async function createNewUser2(user) {
+  const rs = await db.one(
+    'INSERT INTO "users"(email, password, uid, display_name, status, role) VALUES($1, $2, $3, $4, $5, $6) RETURNING *',
+    [
+      user.email,
+      user.password,
+      user.uid,
+      user.display_name,
+      user.status,
+      user.role,
+    ]
+  );
+}
+
 async function deleteUserByEmail(email) {
   const rs = await db.one('DELETE FROM "users" WHERE email = $1 RETURNING *', [
     email,
@@ -140,6 +154,7 @@ module.exports = {
   getUserByEmail,
   deleteUserByEmail,
   createNewUser,
+  createNewUser2,
   editUserByEmail,
   changeStatus,
 };

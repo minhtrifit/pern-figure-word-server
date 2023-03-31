@@ -32,6 +32,7 @@ COMMIT;
 DROP TABLE IF EXISTS "users";
 CREATE TABLE "users" (
 	"email" varchar(100) NOT NULL,
+	"password" varchar(255),
 	"uid" varchar(255) NOT NULL,
 	"display_name" varchar(50) NOT NULL,
 	"photo_url" varchar(500),
@@ -43,7 +44,8 @@ CREATE TABLE "users" (
 ALTER TABLE "users" ADD CONSTRAINT "PK_Users" PRIMARY KEY ("email");
 
 BEGIN;
-INSERT INTO "users" (email, uid, display_name, photo_url, status, role) VALUES ('cauthuminhtri10@gmail.com', 'fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', TRUE, 'user');
+INSERT INTO "users" (email, uid, display_name, photo_url, status, role) VALUES ('cauthuminhtri10@gmail.com', 'fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', FALSE, 'user');
+-- INSERT INTO "users" (email, password, uid, display_name, status, role) VALUES ('boychungtinh145@gmail.com', '123', 'fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', FALSE, 'user');
 COMMIT;
 
 -- ----------------------------
