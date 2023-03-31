@@ -141,7 +141,7 @@ class UserController {
           };
 
           const token = jwt.sign(payload, process.env.JWT_SECRET_KEY, {
-            expiresIn: "5m",
+            // expiresIn: "1m",
           });
 
           res.status(200).json({
