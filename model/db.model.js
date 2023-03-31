@@ -60,8 +60,8 @@ async function getAllPosts() {
 
 async function createNewPosts(post) {
   const rs = await db.one(
-    'INSERT INTO "posts"(user_email, product_id, content, date) VALUES($1, $2, $3, $4) RETURNING *',
-    [post.user_email, post.product_id, post.content, post.date]
+    'INSERT INTO "posts"(user_email, product_id, content, rating, date) VALUES($1, $2, $3, $4, $5) RETURNING *',
+    [post.user_email, post.product_id, post.content, post.rating, post.date]
   );
 }
 

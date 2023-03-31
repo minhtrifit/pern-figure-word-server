@@ -57,6 +57,7 @@ CREATE TABLE "posts" (
 	"user_email" varchar(100) NOT NULL,
 	"product_id" int4 NOT NULL,
 	"content" varchar(500) NOT NULL,
+	"rating" int4 NOT NULL,
 	"date" date
 )
 ;
@@ -64,7 +65,7 @@ CREATE TABLE "posts" (
 ALTER TABLE "posts" ADD CONSTRAINT "PK_Posts" PRIMARY KEY ("id");
 
 BEGIN;
-INSERT INTO "posts" (user_email, product_id, content, date) VALUES ('cauthuminhtri10@gmail.com', 1, 'I was so excited to unbox this!', '2023-03-13');
+INSERT INTO "posts" (user_email, product_id, content, rating, date) VALUES ('cauthuminhtri10@gmail.com', 1, 'I was so excited to unbox this!', 4, '2023-03-13');
 COMMIT;
 
 -- ----------------------------
