@@ -23,7 +23,7 @@ CREATE TABLE "carts" (
 ALTER TABLE "carts" ADD CONSTRAINT "PK_Carts" PRIMARY KEY ("id");
 
 BEGIN;
-INSERT INTO "carts" (user_email, order_id, product_id, amount, price, date) VALUES ('cauthuminhtri10@gmail.com', 15637, 1, 2, 1600000, '2023-03-13');
+INSERT INTO "carts" (user_email, order_id, product_id, amount, price, date) VALUES ('testuser123@gmail.com', 15637, 1, 2, 1600000, '2023-03-13');
 COMMIT;
 
 -- ----------------------------
@@ -44,8 +44,8 @@ CREATE TABLE "users" (
 ALTER TABLE "users" ADD CONSTRAINT "PK_Users" PRIMARY KEY ("email");
 
 BEGIN;
-INSERT INTO "users" (email, uid, display_name, photo_url, status, role) VALUES ('cauthuminhtri10@gmail.com', 'fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', 'https://lh3.googleusercontent.com/a/AGNmyxbRiZoXy72IyW4HkLaaYQ2RDPAGZFQDFJwoR1HXeg=s96-c', FALSE, 'user');
--- INSERT INTO "users" (email, password, uid, display_name, status, role) VALUES ('boychungtinh145@gmail.com', '123', 'fuUqBM0SNbYrQ5Au0t7tMMSK57p2', 'Trí Lê Minh', FALSE, 'user');
+-- INSERT INTO "users" (email, uid, display_name, photo_url, status, role) VALUES ('testuser123@gmail.com', 'abc123', 'user test', '', FALSE, 'user');
+-- INSERT INTO "users" (email, password, uid, display_name, status, role) VALUES ('testuser123@gmail.com', '123', 'abc123', 'user test', FALSE, 'user');
 COMMIT;
 
 -- ----------------------------
@@ -65,7 +65,7 @@ CREATE TABLE "posts" (
 ALTER TABLE "posts" ADD CONSTRAINT "PK_Posts" PRIMARY KEY ("id");
 
 BEGIN;
-INSERT INTO "posts" (user_email, product_id, content, rating, date) VALUES ('cauthuminhtri10@gmail.com', 1, 'I was so excited to unbox this!', 4, '2023-03-13');
+INSERT INTO "posts" (user_email, product_id, content, rating, date) VALUES ('testuser123@gmail.com', 1, 'I was so excited to unbox this!', 4, '2023-03-13');
 COMMIT;
 
 -- ----------------------------
